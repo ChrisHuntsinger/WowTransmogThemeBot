@@ -3,25 +3,26 @@ import sqlite3
 
 #define connection
 
-connection = sqlite3.connect('transmogCompetition.db')
 
-cursor = connection.cursor()
+def insert_theme(player_name, user_id, display_name, theme):
 
-command1 = """CREATE TABLE IF NOT EXISTS
-    player_competition
-        (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        player_name TEXT,
-        user_id TEXT,
-        display_name TEXT,
-        theme TEXT,
-         )"""
+    connection = sqlite3.connect('transmogCompetition.db')
 
-cursor.execute(command1)
+    cursor = connection.cursor()
 
-cursor.execute("INSERT INTO player_competition VALUES(1, 'Ziarcane', 'ChrisHuntsing', 'Christian', 'Pirates'")
+    command1 = """CREATE TABLE IF NOT EXISTS
+        player_competition
+            (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            player_name TEXT,
+            user_id TEXT,
+            display_name TEXT,
+            theme TEXT
+            )"""
 
-cursor.execute("SELECT * FROM player_competition ")
+    cursor.execute(command1)
 
-results = cursor.fetchall()
-print(results)
+    cursor.execute("INSERT INTO player_competition VALUES(NULL, ?, ?, ?, ?)", (player_name, user_id, display_name, theme))
+
+    connection.commit()
+    connection.close()

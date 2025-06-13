@@ -3,6 +3,8 @@ from discord.ext import commands
 import logging
 from dotenv import load_dotenv
 import os
+import db
+
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
@@ -90,5 +92,25 @@ async def poll(ctx, *, question):
     await poll_message.add_reaction("👍")
     await poll_message.add_reaction("👎")
 
+
+@bot.command()
+async def theme_suggestion(ctx, *, msg):
+  user = ctx.author
+
+  #The global discord user name
+  player_name = user.name
+
+  #The string of numbers used to ID the discord user
+  user_id = str(user.id)
+
+  #The users name in a specific server
+  display_name = user.display_name
+
+  #removes white space and new lines with strip()
+  theme = msg.strip()
+  
+  await ctx.send(f"Theme suggestion {theme} received")
+  
+  db.insert_theme(player_name, user_id, display_name, theme)
 
 bot.run(token, log_handler = handler, log_level = logging.DEBUG)
